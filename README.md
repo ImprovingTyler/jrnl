@@ -1,5 +1,5 @@
 # JRNL | PORTFOLIO PROJECT by TYLER LUNDIN |
-
+![alt text](https://user-images.githubusercontent.com/82530947/153780549-ffbb3f9d-7626-4fea-b453-3b201b2c737e.png)
 REACT JS / STYLED-COMPONENTS / FIREBASE / 
 
 ## Utilizes:
