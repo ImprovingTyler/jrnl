@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import styled from 'styled-components'
 import icon0 from './icons/0.png'
 import icon1 from './icons/1.png'
@@ -17,38 +18,15 @@ const Nav = (props) => {
     } = props
 
     S.Nav = styled.div`
-        height: 100vh;
-        width: 50px;
-        background: #1b1b1b;
+        height: 55px;
+        width: 100vw;
+        background: #005eec;
         position: fixed;
         z-index: 1000;
-    `;
-    S.Top = styled.div`
-        background: #1b1b1b;
-        border-bottom-right-radius: 40px;
-        height: 33vh;
-        width: 75px;
         display: grid;
-        grid-template-rows: 1fr 1fr 1fr;
+        grid-auto-flow: column;
     `;
-    S.Middle = styled.div`
-        height: 34vh;
-        width: 50px;
-        background: #1b1b1b;
-        display: grid;
-        justify-items: center;
-        align-items: center;
-    `;
-    S.Bottom = styled.div`
-        background: #1b1b1b;
-        height: 33vh;
-        width: 75px;
-        bottom: 0;
-        position: absolute;
-        border-top-right-radius: 40px;
-        display: grid;
-        grid-template-rows: 1fr 1fr 1fr;
-    `;
+    
     S.Icon = styled.img`
         content:url(${props => props.icon});
         width: 50px;
@@ -57,41 +35,41 @@ const Nav = (props) => {
         justify-self: center;
         transition: 250ms;
         :hover {
-            width: 57px;
-            height: 57px;
+            filter: invert();
         }
     `;
     
     
-    S.JrnlTitle = styled.div`
+    S.Title = styled.div`
         width: 33vh;
         height: 50px; 
-        transform: rotate(-90deg);
         color: white;
-        position: absolute;
         text-align: center;
         line-height: 50px;
+        justify-self: center;
+        :hover {
+            cursor: pointer;
+        }
+        font-family: 'Roboto Mono';
     `;
 
+  
+
+    const [titleClicked, setTitleClicked] = useState()
+    
     return(
         <S.Nav id='Nav'>
-            <S.Top id='NavTop'>
                 <S.Icon id='UserMenuIcon' icon={icon1}/>
                 <S.Icon id='JrnlMenuIcon' icon={icon0}/>
                 <S.Icon id='PageMenuIcon' icon={icon5}/>
-            </S.Top>
 
-            <S.Middle id='NavMiddle'>
-                <S.JrnlTitle id='JrnlTitleContainer' >
-                    <h5 id='JrnlTitle'>{jrnl[0].title}</h5>
-                </S.JrnlTitle>
-            </S.Middle>
+                <S.Title id='TitleContainer' >
+                    <h5 contentEditable="true" id='JrnlTitle' onMouseDown={console.log('CLICK')} onBlur={(e)=>{jrnl[0].title = e.target.innerText}}>{jrnl[0].title}</h5>             
+                </S.Title>
 
-            <S.Bottom id='NavBottom'>
                 <S.Icon id='TagMenuIcon' icon={icon4}/>
                 <S.Icon id='NewMenuIcon' icon={icon3}/>
                 <S.Icon id='SettingsMenuIcon' icon={icon2}/>
-            </S.Bottom>
         </S.Nav>
     )
 }
