@@ -92,13 +92,12 @@ const Page = (props) => {
 
 
     return(
-        <S.Page>
+        <S.Page id='Page'>
             <S.PageContent id='PageContent'>
-                <S.Text onChange={(e)=>jrnl[0].content = e.target.value}/>
-                <S.SaveButton onClick={()=>{setJrnl(jrnl)}}>SAVE SAVE SAVE SAVE SAVE SAVE SAVE</S.SaveButton>
+                <S.Text id='PageText' onChange={(e)=>jrnl[0].content = e.target.value}/>
             </S.PageContent>
-            <S.LeftMargin/>
-            <S.RightMargin/>
+            <S.LeftMargin id='PageLeftMargin'/>
+            <S.RightMargin id='PageRightMargin'/>
         </S.Page>
     )
 }

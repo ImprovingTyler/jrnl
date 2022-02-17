@@ -10,7 +10,11 @@ const S = {}
 
 const Nav = (props) => {
 
-    const {} = props
+    const {
+        jrnl,
+        setJrnl,
+        setPage
+    } = props
 
     S.Nav = styled.div`
         height: 100vh;
@@ -31,6 +35,9 @@ const Nav = (props) => {
         height: 34vh;
         width: 50px;
         background: #1b1b1b;
+        display: grid;
+        justify-items: center;
+        align-items: center;
     `;
     S.Bottom = styled.div`
         background: #1b1b1b;
@@ -54,23 +61,36 @@ const Nav = (props) => {
             height: 57px;
         }
     `;
+    
+    
+    S.JrnlTitle = styled.div`
+        width: 33vh;
+        height: 50px; 
+        transform: rotate(-90deg);
+        color: white;
+        position: absolute;
+        text-align: center;
+        line-height: 50px;
+    `;
 
     return(
-        <S.Nav>
-            <S.Top>
-                <S.Icon icon={icon1}/>
-                <S.Icon icon={icon0}/>
-                <S.Icon icon={icon5}/>
+        <S.Nav id='Nav'>
+            <S.Top id='NavTop'>
+                <S.Icon id='UserMenuIcon' icon={icon1}/>
+                <S.Icon id='JrnlMenuIcon' icon={icon0}/>
+                <S.Icon id='PageMenuIcon' icon={icon5}/>
             </S.Top>
 
-            <S.Middle>
-
+            <S.Middle id='NavMiddle'>
+                <S.JrnlTitle id='JrnlTitleContainer' >
+                    <h5 id='JrnlTitle'>{jrnl[0].title}</h5>
+                </S.JrnlTitle>
             </S.Middle>
 
-            <S.Bottom>
-                <S.Icon icon={icon4}/>
-                <S.Icon icon={icon3}/>
-                <S.Icon icon={icon2}/>
+            <S.Bottom id='NavBottom'>
+                <S.Icon id='TagMenuIcon' icon={icon4}/>
+                <S.Icon id='NewMenuIcon' icon={icon3}/>
+                <S.Icon id='SettingsMenuIcon' icon={icon2}/>
             </S.Bottom>
         </S.Nav>
     )

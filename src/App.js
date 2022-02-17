@@ -34,9 +34,9 @@ function App() {
   const [page, setPage] = useState(jrnlCollection[0][0])
   
   return (
-    <S.App>
-        <Nav />
-        <Page pageHeight={50} isDarkMode={false} jrnl={jrnl} setJrnl={setJrnl} page={page} setPage={setPage} />
+    <S.App id='App'>
+        <Nav jrnl={jrnl} setJrnl={setJrnl} setPage={setPage}/>
+        <Page isDarkMode={false} jrnl={jrnl} page={page} />
     </S.App>
   );
 }
