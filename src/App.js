@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import Nav from './components/nav/Nav';
 import Page from './components/Page';
+import { useState, useContext } from 'react'
 
 const S = {}
 
@@ -10,10 +11,13 @@ S.App = styled.div`
   overflow: hidden;
 `;
 function App() {
+  const [jrnl, setJrnl] = useState('test1')
+  const [page, setPage] = useState()
+  
   return (
     <S.App>
-      <Page pageHeight={50} isDarkMode={false}/>
-      <Nav/>
+        <Nav/>
+        <Page pageHeight={50} isDarkMode={false} jrnl={jrnl} />
     </S.App>
   );
 }

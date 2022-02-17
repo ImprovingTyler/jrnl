@@ -1,4 +1,3 @@
-import { render } from '@testing-library/react'
 import styled from 'styled-components'
 import icon0 from './icons/0.png'
 import icon1 from './icons/1.png'
@@ -9,14 +8,16 @@ import icon5 from './icons/5.png'
 
 const S = {}
 
-const Nav = () => {
+const Nav = (props) => {
+
+    const {} = props
 
     S.Nav = styled.div`
         height: 100vh;
         width: 50px;
         background: #1b1b1b;
         position: fixed;
-        
+        z-index: 1000;
     `;
     S.Top = styled.div`
         background: #1b1b1b;
@@ -41,7 +42,6 @@ const Nav = () => {
         display: grid;
         grid-template-rows: 1fr 1fr 1fr;
     `;
-
     S.Icon = styled.img`
         content:url(${props => props.icon});
         width: 50px;
@@ -55,7 +55,7 @@ const Nav = () => {
         }
     `;
 
-    render(
+    return(
         <S.Nav>
             <S.Top>
                 <S.Icon icon={icon1}/>
