@@ -11,7 +11,9 @@ const Page = (props) => {
         isDarkModeEnabled,
         pageHeight,
         jrnl,
-        setJrnl
+        setJrnl,
+        page,
+        setPage
     } = props
 
 
@@ -54,7 +56,7 @@ const Page = (props) => {
         background:none;
         resize: none;
         border: none;
-        width: calc(100vw - 206px);
+        width: calc(100vw - 210px);
         height: 100%;
         font-size: 2em;
         line-height: 123%;
@@ -69,14 +71,31 @@ const Page = (props) => {
         z-index: 99;
 
     `;
+
+    S.SaveButton = styled.button`
+        margin: auto;
+        width: 100px;
+        height: 100vh;
+        position: absolute;
+        bottom: 0; right: 0;
+        border: none;
+        background: rgba(60,60,60,.5);
+        color: white;
+        font-size: 2rem;
+        :hover {
+            background: rgb(100,100,100);
+        }
+        transition: 250ms;
+        line-height: 14vh;
+    `;
     
 
 
     return(
         <S.Page>
             <S.PageContent id='PageContent'>
-                <S.Text onChange={(e)=>console.log(e.target.value)}/>
-                
+                <S.Text onChange={(e)=>jrnl[0].content = e.target.value}/>
+                <S.SaveButton onClick={()=>{setJrnl(jrnl)}}>SAVE SAVE SAVE SAVE SAVE SAVE SAVE</S.SaveButton>
             </S.PageContent>
             <S.LeftMargin/>
             <S.RightMargin/>
