@@ -19,23 +19,12 @@ const Page = (props) => {
 
     const lines = []
     S.Page = styled.div`
-        /* background: ${isDarkModeEnabled ? '#efefef' : '#4d4a4a'}; */
-        background-color: white;
-        background: repeating-linear-gradient(white, white 1.8em, #9198e5 1.9em, #9198e5 2em);
+        background: repeating-linear-gradient(lightyellow, lightyellow 1.8em, #9198e5 1.9em, #9198e5 2em);
         height: 100%;
         width: 100%;
         padding: 0;
         overflow: hidden;
     `;
-
-
-    // S.RedLine = styled.div`
-    //     width: 3px;
-    //     background: red;
-    //     min-height: 500vw;
-    //     position: fixed;
-    //     margin-left: 10%;
-    // `;
 
     S.LeftMargin = styled.div`
         float: left;
@@ -47,9 +36,8 @@ const Page = (props) => {
         float: right;
         width: 100px;
         height: 100%;
-        border-left: 1px solid pink;
+        border-left: 2px solid pink;
     `;
-  
 
     S.Text = styled.textarea`
         /* text-align: center; */
@@ -61,7 +49,7 @@ const Page = (props) => {
         font-size: 2em;
         line-height: 123%;
         overflow:hidden;
-        padding: 0 105px;
+        padding: 62px 105px;
     `;
 
     S.PageContent = styled.div`
