@@ -13,9 +13,12 @@ const S = {}
 const Nav = (props) => {
 
     const {
-        jrnl,
         setJrnl,
-        setPage
+        setPage,
+        setIsMenuOpen,
+        isMenuOpen,
+        setMenuSelected,
+        menuSelected
     } = props
 
     S.Nav = styled.div`
@@ -88,11 +91,16 @@ const Nav = (props) => {
         }
     }
 
+    function handleMenuClick (selection) {
+        isMenuOpen && menuSelected == selection ? setIsMenuOpen(false) : setIsMenuOpen(true)
+        setMenuSelected(selection)
+    }
+
     return(
         <S.Nav id='Nav'>
-                <S.Icon id='UserMenuIcon' icon={icon1} />
-                <S.Icon id='JrnlMenuIcon' icon={icon0} setJrnl={setJrnl}/>
-                <S.Icon id='PageMenuIcon' icon={icon5} setPage={setPage}/>
+                <S.Icon id='UserMenuIcon' icon={icon1} onClick={()=>handleMenuClick(0)}/>
+                <S.Icon id='JrnlMenuIcon' icon={icon0} onClick={()=>handleMenuClick(1)}/>
+                <S.Icon id='PageMenuIcon' icon={icon5} onClick={()=>handleMenuClick(2)}/>
 
                 <S.TitleContainer id='TitleContainer' onClick={()=>setTitleClicked(true)}>
                     { titleClicked ?
@@ -106,9 +114,9 @@ const Nav = (props) => {
                     }
                 </S.TitleContainer>
 
-                <S.Icon id='TagMenuIcon'      icon={icon4}/>
-                <S.Icon id='NewMenuIcon'      icon={icon3}/>
-                <S.Icon id='SettingsMenuIcon' icon={icon2}/>
+                <S.Icon id='TagMenuIcon'      icon={icon4} onClick={()=>handleMenuClick(3)}/>
+                <S.Icon id='NewMenuIcon'      icon={icon3} onClick={()=>handleMenuClick(4)}/>
+                <S.Icon id='SettingsMenuIcon' icon={icon2} onClick={()=>handleMenuClick(5)}/>
         </S.Nav>
     )
 }

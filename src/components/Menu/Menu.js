@@ -5,8 +5,9 @@ const S = {}
 
 const Menu = (props) => {
     const {
-        menuIsOpen,
-        menuSelected
+        isMenuOpen,
+        menuSelected,
+        setIsMenuOpen
     } = props
     S.Menu = styled.div`
         width: 80vw;
@@ -18,13 +19,23 @@ const Menu = (props) => {
         top: 0;
         bottom: 0;
         margin: auto;
-        visibility: ${props => props.menuIsOpen ? 'visible' : 'hidden'};
-        
+        z-index: 999;
+    `;
+    S.ExitButton = styled.div`
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50px;
+        height: 50px;
+        background: red;
     `;
 
+    function closeMenu () {
+        setIsMenuOpen(false)
+    }
     return (
         <S.Menu>
-            <Outlet/>            
+            <S.ExitButton onClick={closeMenu}/>
         </S.Menu>
     )
 }

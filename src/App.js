@@ -46,8 +46,8 @@ function App() {
             
             
               <S.App id='App'>
-                  <Menu isMenuOpen={isMenuOpen} menuSelected={menuSelected}/>
-                  <Nav jrnl={jrnl} setJrnl={setJrnl} setPage={setPage}/>
+                  { isMenuOpen ? <Menu menuSelected={menuSelected} setIsMenuOpen={setIsMenuOpen}/> : <></>}
+                  <Nav setJrnl={setJrnl} setPage={setPage} setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} setMenuSelected={setMenuSelected} menuSelected={menuSelected}/>
                   <Page isDarkMode={false} jrnl={jrnl} page={page} />
               </S.App>
       
