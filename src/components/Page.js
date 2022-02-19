@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import {useState, useRef} from 'react'
+
 
 const S = {}
 
@@ -14,7 +16,6 @@ const Page = (props) => {
     } = props
 
 
-    const lines = []
     S.Page = styled.div`
         background: repeating-linear-gradient(lightyellow, lightyellow 1.8em, #9198e5 1.9em, #9198e5 2em);
         height: 100%;
@@ -22,7 +23,6 @@ const Page = (props) => {
         padding: 0;
         overflow: hidden;
     `;
-
     S.LeftMargin = styled.div`
         float: left;
         width: 100px;
@@ -35,7 +35,6 @@ const Page = (props) => {
         height: 100%;
         border-left: 2px solid pink;
     `;
-
     S.Text = styled.textarea`
         /* text-align: center; */
         background:none;
@@ -48,15 +47,12 @@ const Page = (props) => {
         overflow:hidden;
         padding: 62px 105px 0 105px;
     `;
-
     S.PageContent = styled.div`
         position: absolute;
         width: 100vw;
         height: 100vh;
         z-index: 99;
-
     `;
-
     S.SaveButton = styled.button`
         margin: auto;
         width: 100px;
@@ -74,16 +70,21 @@ const Page = (props) => {
         line-height: 14vh;
     `;
     
-
-
+    const textRef = useRef()
+    function handleSave() {
+        setPage(textRef.current.value)
+    }
     return(
-        <S.Page id='Page'>
-            <S.PageContent id='PageContent'>
-                <S.Text id='PageText' onChange={(e)=>setPage(e.target.value)}/>
-            </S.PageContent>
-            <S.LeftMargin id='PageLeftMargin'/>
-            <S.RightMargin id='PageRightMargin'/>
-        </S.Page>
+        <>
+            <button onClick={handleSave}>SAVE</button>
+            <S.Page id='Page'>
+                <S.PageContent id='PageContent'>
+                    <S.Text id='PageText' ref={textRef} defaultValue={page}/>
+                </S.PageContent>
+                <S.LeftMargin id='PageLeftMargin'/>
+                <S.RightMargin id='PageRightMargin'/>
+            </S.Page>
+        </>
     )
 }
 

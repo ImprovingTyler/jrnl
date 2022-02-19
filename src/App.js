@@ -5,6 +5,7 @@ import Page from './components/Page';
 import { useState, useContext } from 'react'
 import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
 import { initializeApp } from 'firebase/app'
+import { doc, getFirestore, setDoc } from "firebase/firestore"; 
 
 const firebaseConfig = {
   apiKey: "AIzaSyDSi0QLsrrr-hq3DWKSaaUDq-rRRGh1NOY",
@@ -18,8 +19,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig) 
 const auth = getAuth()
 const provider = new GoogleAuthProvider()
+const db = getFirestore()
 
-const S = {}
+const S = {} 
 S.App = styled.div`
   width: 100vw; 
   height: 100vh;
@@ -32,23 +34,39 @@ S.Login = styled.button`
 
 function App() {
   const [jrnlCollection, setJrnlCollection] = useState() // db
-  const [jrnl, setJrnl] = useState(null) // collection 
+  const [jrnl, setJrnl] = useState(null) // title
   const [page, setPage] = useState(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuSelected, setMenuSelected] = useState(0)
   const [user, setUser] = useState(null)
-
+  let userID
   function handleLogin() {
     signInWithPopup(auth, provider)
     .then((result) => {
       setUser(result.user)
+      userID = result.user.id
     })
     .catch((error) => {
       console.log(error)
     })
   }
-  function handleSave() {
-  
+  async function handleSave() {
+    // await setDoc(doc(db, 'users'), {
+    //   jrnl: 'JRNL',
+    //   page: 'PAGE'
+    // })
+    await setDoc(doc(db, 'users', auth.currentUser.uid), {
+      jrnl: [
+        {
+          jrnlTitle: jrnl,
+          pages: [
+            {
+              content: page
+            }
+          ]
+        }
+      ]
+    });
   }
 
   return (
@@ -56,7 +74,7 @@ function App() {
           <button onClick={handleLogin}>SIGN IN</button>
           <button onClick={handleSave}>SAVE PAGE</button>
           {user ? 
-          
+
           <S.App id='App'>
             { isMenuOpen ? <Menu menuSelected={menuSelected} setIsMenuOpen={setIsMenuOpen}/> : <></>}
             <Nav setJrnl={setJrnl} setPage={setPage} setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} setMenuSelected={setMenuSelected} menuSelected={menuSelected}/>

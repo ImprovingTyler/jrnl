@@ -77,10 +77,11 @@ const Nav = (props) => {
     const [titleClicked, setTitleClicked] = useState(false)
     let [title, setTitle] = useState('Click to change title!')
     const editTitleRef = useRef();
+
     function changeTitle (e) {
         if (e.target.value !== '') {
             setTitle(e.target.value)
-
+            setJrnl(e.target.value)
         }
         setTitleClicked(false)
     }
