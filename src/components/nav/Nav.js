@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useRef} from 'react'
 import styled from 'styled-components'
 import icon0 from './icons/0.png'
 import icon1 from './icons/1.png'
@@ -28,7 +28,6 @@ const Nav = (props) => {
         grid-auto-flow: column;
         box-shadow: 0px 1px 10px black;
     `;
-    
     S.Icon = styled.img`
         content:url(${props => props.icon});
         width: 50px;
@@ -39,9 +38,7 @@ const Nav = (props) => {
         :hover {
             filter: invert();
         }
-    `;
-    
-    
+    `;   
     S.TitleContainer = styled.div`
         width: 25vh;
         height: 50px; 
@@ -59,41 +56,58 @@ const Nav = (props) => {
         }
         font-family: 'Roboto Mono';
     `;
-
     S.EditTitle = styled.input`
         background: none;
         /* border-radius: 0; */
-        border: 1px solid white;
+        border: none;
         color: white;
+        text-align: center;
         ::placeholder {
             color: white;
+            font-size: 1rem;
+        }
+        :focus {
+            outline: none;
         }
     `;
 
-    const [titleClicked, setTitleClicked] = useState()
-    
+    const [titleClicked, setTitleClicked] = useState(false)
+    let [title, setTitle] = useState('Click to change title!')
+    const editTitleRef = useRef();
     function changeTitle (e) {
-        jrnl[0].title = e.target.value
+        if (e.target.value !== '') {
+            setTitle(e.target.value)
+
+        }
         setTitleClicked(false)
-        
+    }
+
+    function handleKeyPress (e) {
+        if (e.key === 'Enter') {
+            editTitleRef.current.blur()
+        }
     }
 
     return(
         <S.Nav id='Nav'>
-                <S.Icon id='UserMenuIcon' icon={icon1}/>
+                <S.Icon id='UserMenuIcon' icon={icon1} />
                 <S.Icon id='JrnlMenuIcon' icon={icon0} setJrnl={setJrnl}/>
                 <S.Icon id='PageMenuIcon' icon={icon5} setPage={setPage}/>
 
                 <S.TitleContainer id='TitleContainer' onClick={()=>setTitleClicked(true)}>
                     { titleClicked ?
-                        <S.EditTitle onBlur={(e)=>{changeTitle(e)}} placeholder={jrnl[0].title} maxLength="25" autoFocus/>
-                        :
-                        <h5 id='JrnlTitle'>{jrnl[0].title}</h5>             
+                        <S.EditTitle onBlur={(e)=>{changeTitle(e)}} 
+                                     placeholder={title} 
+                                     maxLength="25" 
+                                     autoFocus
+                                     onKeyUp={handleKeyPress}
+                                     ref={editTitleRef}/> 
+                        : <h5 id='JrnlTitle'>{title}</h5>             
                     }
                 </S.TitleContainer>
 
-                <S.Icon id='TagMenuIcon' icon={icon4}/>
-                <S.Icon id='NewMenuIcon' icon={icon3}/>
+                <S.Icon id='TagMenuIcon'      icon={icon4}/>
+                <S.Icon id='NewMenuIcon'      icon={icon3}/>
                 <S.Icon id='SettingsMenuIcon' icon={icon2}/>
         </S.Nav>
     )

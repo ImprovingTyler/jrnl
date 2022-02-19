@@ -8,12 +8,7 @@ const S = {}
 
 const Page = (props) => {
     const {
-        isDarkModeEnabled,
-        pageHeight,
         jrnl,
-        setJrnl,
-        page,
-        setPage
     } = props
 
 
