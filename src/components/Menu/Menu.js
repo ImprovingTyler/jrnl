@@ -1,6 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components'
-
+import UserMenu from './UserMenu/UserMenu';
+import JrnlMenu from './JrnlMenu/JrnlMenu';
+import PageMenu from './PageMenu/PageMenu';
+import TagsMenu from './TagsMenu/TagsMenu';
+import CreateMenu from './CreateMenu/CreateMenu';
+import SettingsMenu from './SettingsMenu/SettingsMenu';
 const S = {}
 
 const Menu = (props) => {
@@ -33,9 +38,21 @@ const Menu = (props) => {
     function closeMenu () {
         setIsMenuOpen(false)
     }
+    function openMenu(menuSelected) {
+        switch(menuSelected) {
+            case 0 : return <UserMenu/>
+            case 1 : return <JrnlMenu/>
+            case 2 : return <PageMenu/>
+            case 3 : return <TagsMenu/>
+            case 4 : return <CreateMenu/>
+            case 5 : return <SettingsMenu/>
+            
+        }
+    }
     return (
         <S.Menu>
             <S.ExitButton onClick={closeMenu}/>
+            {openMenu(menuSelected)}
         </S.Menu>
     )
 }

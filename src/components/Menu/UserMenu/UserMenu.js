@@ -1,12 +1,9 @@
 import styled from 'styled-components'
-import googleSignIn from './btn_google_signin_dark_normal_web.png'
     const S = {}
 
 const UserMenu = () => {
-    S.Container = styled.div`
-        width: 60vw;
-        height: 60vh;
-        background: rgb(70,70,70);
+    S.UserMenu = styled.div`
+        color: white;
     `;
 
     S.LogIn = styled.div`
@@ -14,8 +11,10 @@ const UserMenu = () => {
     `;
 
     return (
-        <S.Container>
-            <img src={googleSignIn}></img>
-        </S.Container>
+        <S.UserMenu>
+            USER MENU
+        </S.UserMenu>
     )
 }
+
+export default UserMenu
