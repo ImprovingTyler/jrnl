@@ -9,6 +9,8 @@ const S = {}
 const Page = (props) => {
     const {
         jrnl,
+        page,
+        setPage
     } = props
 
 
@@ -40,11 +42,11 @@ const Page = (props) => {
         resize: none;
         border: none;
         width: calc(100vw - 210px);
-        height: 100%;
+        height: calc(100% - 55px);
         font-size: 2em;
         line-height: 123%;
         overflow:hidden;
-        padding: 62px 105px;
+        padding: 62px 105px 0 105px;
     `;
 
     S.PageContent = styled.div`
@@ -77,7 +79,7 @@ const Page = (props) => {
     return(
         <S.Page id='Page'>
             <S.PageContent id='PageContent'>
-                <S.Text id='PageText' onChange={(e)=>jrnl[0].content = e.target.value}/>
+                <S.Text id='PageText' onChange={(e)=>setPage(e.target.value)}/>
             </S.PageContent>
             <S.LeftMargin id='PageLeftMargin'/>
             <S.RightMargin id='PageRightMargin'/>
