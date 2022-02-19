@@ -5,7 +5,8 @@ import Page from './components/Page';
 import { useState, useContext } from 'react'
 import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
 import { initializeApp } from 'firebase/app'
-import { doc, getFirestore, setDoc } from "firebase/firestore"; 
+import { doc, getFirestore, setDoc, getDoc } from "firebase/firestore"; 
+import LogInWithGoogle from './components/LogInWithGoogle/LogInWithGoogle';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDSi0QLsrrr-hq3DWKSaaUDq-rRRGh1NOY",
@@ -40,6 +41,7 @@ function App() {
   const [menuSelected, setMenuSelected] = useState(0)
   const [user, setUser] = useState(null)
   let userID
+
   function handleLogin() {
     signInWithPopup(auth, provider)
     .then((result) => {
@@ -51,10 +53,6 @@ function App() {
     })
   }
   async function handleSave() {
-    // await setDoc(doc(db, 'users'), {
-    //   jrnl: 'JRNL',
-    //   page: 'PAGE'
-    // })
     await setDoc(doc(db, 'users', auth.currentUser.uid), {
       jrnl: [
         {
@@ -69,19 +67,37 @@ function App() {
     });
   }
 
+  async function loadJrnl() {
+    const docRef = doc(db, 'users', auth.currentUser.uid)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists())
+    {
+      console.log('DOCUMENT DATA:', docSnap.data())
+      setJrnl(docSnap.data().jrnl[0].jrnlTitle)
+      setPage(docSnap.data().jrnl[0].pages[0].content)
+    }
+    else {
+      console.log("DOCUMENT DOESN'T EXIST")
+    }
+    
+  }
+
   return (
       <>
-          <button onClick={handleLogin}>SIGN IN</button>
-          <button onClick={handleSave}>SAVE PAGE</button>
+          {/* <button onClick={handleSave}>SAVE PAGE</button> */}
+          <button onClick={loadJrnl}>LOAD</button>
           {user ? 
 
           <S.App id='App'>
             { isMenuOpen ? <Menu menuSelected={menuSelected} setIsMenuOpen={setIsMenuOpen}/> : <></>}
-            <Nav setJrnl={setJrnl} setPage={setPage} setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} setMenuSelected={setMenuSelected} menuSelected={menuSelected}/>
-            <Page isDarkMode={false} jrnl={jrnl} page={page} setPage={setPage}/>
+            <Nav setJrnl={setJrnl} jrnl={jrnl} setPage={setPage} setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} setMenuSelected={setMenuSelected} menuSelected={menuSelected}/>
+            <Page jrnl={jrnl} page={page} setPage={setPage}/>
           </S.App> 
 
-          : <>LOG IN</>}
+          :
+          <LogInWithGoogle handleLogin={handleLogin}/>
+          }
       </>
   );
 }

@@ -78,9 +78,11 @@ const Page = (props) => {
         <>
             <button onClick={handleSave}>SAVE</button>
             <S.Page id='Page'>
+                
                 <S.PageContent id='PageContent'>
-                    <S.Text id='PageText' ref={textRef} defaultValue={page}/>
+                    <S.Text id='PageText' ref={textRef} defaultValue={page} onBlur={handleSave}/>
                 </S.PageContent>
+                
                 <S.LeftMargin id='PageLeftMargin'/>
                 <S.RightMargin id='PageRightMargin'/>
             </S.Page>

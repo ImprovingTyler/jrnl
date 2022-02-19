@@ -14,6 +14,7 @@ const Nav = (props) => {
 
     const {
         setJrnl,
+        jrnl,
         setPage,
         setIsMenuOpen,
         isMenuOpen,
@@ -105,13 +106,16 @@ const Nav = (props) => {
 
                 <S.TitleContainer id='TitleContainer' onClick={()=>setTitleClicked(true)}>
                     { titleClicked ?
-                        <S.EditTitle onBlur={(e)=>{changeTitle(e)}} 
-                                     placeholder={title} 
-                                     maxLength="25" 
-                                     autoFocus
-                                     onKeyUp={handleKeyPress}
-                                     ref={editTitleRef}/> 
-                        : <h5 id='JrnlTitle'>{title}</h5>             
+                        <S.EditTitle 
+                            onBlur={(e)=>{changeTitle(e)}} 
+                            placeholder={title} 
+                            maxLength="25" 
+                            autoFocus
+                            onKeyUp={handleKeyPress}
+                            ref={editTitleRef}
+                        /> 
+                        : 
+                        <h5 id='JrnlTitle'>{jrnl}</h5>             
                     }
                 </S.TitleContainer>
 
