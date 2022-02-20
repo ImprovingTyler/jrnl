@@ -10,9 +10,10 @@ const S = {}
 
 const Menu = (props) => {
     const {
-        isMenuOpen,
         menuSelected,
-        setIsMenuOpen
+        setIsMenuOpen,
+        auth,
+        signOut
     } = props
     S.Menu = styled.div`
         width: 80vw;

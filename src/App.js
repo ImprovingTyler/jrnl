@@ -2,12 +2,12 @@ import styled from 'styled-components'
 import Nav from './components/nav/Nav';
 import Menu from './components/Menu/Menu'
 import Page from './components/Page';
-import { useState, useContext } from 'react'
-import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
+import { useState, createContext } from 'react'
+
+import LogInWithGoogle from './components/LogInWithGoogle/LogInWithGoogle';
+import { GoogleAuthProvider, signInWithPopup, getAuth, signOut } from "firebase/auth";
 import { initializeApp } from 'firebase/app'
 import { doc, getFirestore, setDoc, getDoc } from "firebase/firestore"; 
-import LogInWithGoogle from './components/LogInWithGoogle/LogInWithGoogle';
-
 const firebaseConfig = {
   apiKey: "AIzaSyDSi0QLsrrr-hq3DWKSaaUDq-rRRGh1NOY",
   authDomain: "jrnl-7e606.firebaseapp.com",
@@ -22,6 +22,8 @@ const auth = getAuth()
 const provider = new GoogleAuthProvider()
 const db = getFirestore()
 
+export const UserContext = createContext()
+
 const S = {} 
 S.App = styled.div`
   width: 100vw; 
@@ -35,12 +37,25 @@ S.Login = styled.button`
 
 function App() {
   const [jrnlCollection, setJrnlCollection] = useState() // db
-  const [jrnl, setJrnl] = useState(null) // title
+  const [jrnl, setJrnl] = useState('JRNL TITLE') // title
   const [page, setPage] = useState(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuSelected, setMenuSelected] = useState(0)
   const [user, setUser] = useState(null)
+  
   let userID
+
+  let loadedJrnl = {
+    jrnlTitle: '',
+    pages: []
+  }
+
+  let loadedPage = {
+    pageTitle: '',
+    pageContent: '',
+    tags: [],
+    pageID: 0
+  }
 
   function handleLogin() {
     signInWithPopup(auth, provider)
@@ -59,6 +74,7 @@ function App() {
           jrnlTitle: jrnl,
           pages: [
             {
+              pageTitle: 'pageTitle',
               content: page
             }
           ]
@@ -66,7 +82,6 @@ function App() {
       ]
     });
   }
-
   async function loadJrnl() {
     const docRef = doc(db, 'users', auth.currentUser.uid)
     const docSnap = await getDoc(docRef)
@@ -82,22 +97,36 @@ function App() {
     }
     
   }
+  const signOutUser = () => {
+    signOut(auth).then(setUser(null))
+    .catch((err)=>console.log(err))
+    
+  }
+  
 
   return (
       <>
-          {/* <button onClick={handleSave}>SAVE PAGE</button> */}
+          {/* <button onClick={handleSave}>SAVE PAGE</button>
           <button onClick={loadJrnl}>LOAD</button>
-          {user ? 
+          <button onClick={()=>console.log(user.email)}>LOG USER</button> */}
+        { user ? 
 
           <S.App id='App'>
-            { isMenuOpen ? <Menu menuSelected={menuSelected} setIsMenuOpen={setIsMenuOpen}/> : <></>}
+            
+              { isMenuOpen ? 
+              <UserContext.Provider value={{user: user, signOutUser: signOutUser}}>
+                <Menu menuSelected={menuSelected} setIsMenuOpen={setIsMenuOpen} auth={auth} signOut={signOut}/>
+              </UserContext.Provider>
+                 : <></>
+              }
+            
             <Nav setJrnl={setJrnl} jrnl={jrnl} setPage={setPage} setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} setMenuSelected={setMenuSelected} menuSelected={menuSelected}/>
             <Page jrnl={jrnl} page={page} setPage={setPage}/>
           </S.App> 
 
           :
           <LogInWithGoogle handleLogin={handleLogin}/>
-          }
+        }
       </>
   );
 }
