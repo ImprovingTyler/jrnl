@@ -7,7 +7,7 @@ import { useState, createContext } from 'react'
 import LogInWithGoogle from './components/LogInWithGoogle/LogInWithGoogle';
 import { GoogleAuthProvider, signInWithPopup, getAuth, signOut } from "firebase/auth";
 import { initializeApp } from 'firebase/app'
-import { doc, getFirestore, setDoc, getDoc } from "firebase/firestore"; 
+import { doc, getFirestore, setDoc, getDoc, addDoc, collection } from "firebase/firestore"; 
 const firebaseConfig = {
   apiKey: "AIzaSyDSi0QLsrrr-hq3DWKSaaUDq-rRRGh1NOY",
   authDomain: "jrnl-7e606.firebaseapp.com",
@@ -44,6 +44,7 @@ function App() {
   const [user, setUser] = useState(null)
   
   let userID
+  
 
   let loadedJrnl = {
     jrnlTitle: '',
@@ -57,6 +58,8 @@ function App() {
     pageID: 0
   }
 
+
+
   function handleLogin() {
     signInWithPopup(auth, provider)
     .then((result) => {
@@ -68,7 +71,7 @@ function App() {
     })
   }
   async function handleSave() {
-    await setDoc(doc(db, 'users', auth.currentUser.uid), {
+    await setDoc(doc(db, 'users', auth.currentUser.uid, doc().id), {
       jrnl: [
         {
           jrnlTitle: jrnl,
@@ -82,6 +85,15 @@ function App() {
       ]
     });
   }
+
+  async function SaveData() {
+    await addDoc(collection(db, 'jrnls'), {
+      jrnlTitle: "jrnl",
+      pages: [page],
+      ownerID: auth.currentUser.uid
+    });
+  }
+  
   async function loadJrnl() {
     const docRef = doc(db, 'users', auth.currentUser.uid)
     const docSnap = await getDoc(docRef)
@@ -106,9 +118,9 @@ function App() {
 
   return (
       <>
-          {/* <button onClick={handleSave}>SAVE PAGE</button>
+          <button onClick={SaveData}>SAVE PAGE</button>
           <button onClick={loadJrnl}>LOAD</button>
-          <button onClick={()=>console.log(user.email)}>LOG USER</button> */}
+          <button onClick={()=>console.log(user.email)}>LOG USER</button>
         { user ? 
 
           <S.App id='App'>

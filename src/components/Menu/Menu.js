@@ -6,6 +6,7 @@ import PageMenu from './PageMenu/PageMenu';
 import TagsMenu from './TagsMenu/TagsMenu';
 import CreateMenu from './CreateMenu/CreateMenu';
 import SettingsMenu from './SettingsMenu/SettingsMenu';
+import {AiOutlineClose} from 'react-icons/ai'
 const S = {}
 
 const Menu = (props) => {
@@ -31,9 +32,10 @@ const Menu = (props) => {
         position: absolute;
         top: 0;
         right: 0;
-        width: 50px;
-        height: 50px;
-        background: red;
+        width: 2rem;
+        height: 2rem;
+        font-size: 2rem;
+        color: white;
     `;
 
     function closeMenu () {
@@ -52,7 +54,9 @@ const Menu = (props) => {
     }
     return (
         <S.Menu>
-            <S.ExitButton onClick={closeMenu}/>
+            <S.ExitButton onClick={closeMenu}>
+                <AiOutlineClose/>
+            </S.ExitButton>
             {openMenu(menuSelected)}
         </S.Menu>
     )
