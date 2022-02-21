@@ -33,7 +33,8 @@ S.ExitButton = styled.div`
 const Menu = (props) => {
     const {
         menuSelected,
-        setIsMenuOpen
+        setIsMenuOpen,
+        setJrnl
     } = props
     
 
@@ -43,7 +44,7 @@ const Menu = (props) => {
     function openMenu(menuSelected) {
         switch(menuSelected) {
             case 0 : return <UserMenu/>
-            case 1 : return <JrnlMenu/>
+            case 1 : return <JrnlMenu setJrnl={setJrnl} />
             case 2 : return <PageMenu/>
             case 3 : return <TagsMenu/>
             case 4 : return <CreateMenu/>

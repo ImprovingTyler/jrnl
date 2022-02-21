@@ -28,31 +28,32 @@ S.JrnlIcon = styled.img`
     height: 60px;
 `;
 
-function LoadJrnls(user) {
-    let title
-    let dateCreated
-    let lastEdit
-    return (
-        <S.JrnlCard>
-            <S.JrnlIcon src={jrnlIcon}/>
-            <h3>{title}</h3>
-            <h3>{dateCreated}</h3>
-            <h3>{lastEdit}</h3>
-        </S.JrnlCard>
-    )
-}
+
 
 const JrnlMenu = (props) => {
 
+    const {
+        setJrnl
+    } = props
+    
+    function LoadJrnls(jrnlToLoad) {
+        setJrnl(jrnlToLoad)
+    }
+    
     return (
         <UserContext.Consumer>
-            { user =>
-                <S.JrnlMenu>
-                    <S.JrnlCard>
-                        <S.JrnlIcon src={jrnlIcon}/>
-                        <h3>JRNL TITLE</h3>
-                    </S.JrnlCard>
-                </S.JrnlMenu>
+            { ({jrnls, setJrnlNumber, loadJrnl}) =>
+                jrnls[0].map((jrnl, index)=>{
+                    return(
+                        <S.JrnlCard key={index} onClick={()=>{
+                            setJrnlNumber(index)
+                            loadJrnl()
+                            }}
+                        >
+                            <S.JrnlIcon src={jrnlIcon}/>
+                            <h3>{jrnl}</h3>
+                        </S.JrnlCard>)
+                })
             }
         </UserContext.Consumer>
     )

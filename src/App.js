@@ -23,6 +23,7 @@ S.App = styled.div`
 
 
 function App() {
+  const [jrnls, setJrnls] = useState([[],[]])
   const [jrnl, setJrnl] = useState('JRNL TITLE') // title
   const [page, setPage] = useState(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -30,15 +31,6 @@ function App() {
   const [user, setUser] = useState(null)
   const [uID, setUID] = useState(null)
   const [jrnlNumber, setJrnlNumber] = useState(0)
-  // async function SaveData() {
-  //   await addDoc(collection(db, 'jrnls'), {
-  //     jrnlTitle: "jrnl",
-  //     pages: [page],
-  //     ownerID: auth.currentUser.uid
-  //   });
-  // }
-
-
 
   async function GetJrnlList() {
     // const docRef = collection(db, uID)
@@ -50,11 +42,12 @@ function App() {
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       console.log(doc.id, " => ", doc.data());
-      console.log(doc.data.jrnlTitle)
+      console.log(doc.data().jrnlTitle)
+      jrnls[0].push([doc.data().jrnlTitle])
+      jrnls[1].push([doc.id])
     });
-    
+    setJrnls(jrnls)
   }
-
   async function SaveData() {
     if (setDoc(collection(db, auth.currentUser.uid, jrnlNumber)))
       await addDoc(collection(db, auth.currentUser.uid), {
@@ -70,19 +63,21 @@ function App() {
     .catch((error) => console.log(error))
   }
   async function loadJrnl() {
-    const docRef = doc(db, 'users', auth.currentUser.uid)
+    const jrnlID = jrnls[1][jrnlNumber]
+    console.log(jrnlID.toString())
+    const docRef = doc(db, uID, jrnlID.toString())
     const docSnap = await getDoc(docRef)
-
     if (docSnap.exists())
     {
       console.log('DOCUMENT DATA:', docSnap.data())
-      setJrnl(docSnap.data().jrnl[0].jrnlTitle)
-      setPage(docSnap.data().jrnl[0].pages[0].content)
+      setJrnl(docSnap.data().jrnlTitle)
+      setPage(docSnap.data().pages[0]) 
+      setIsMenuOpen(false)
     }
     else {
       console.log("DOCUMENT DOESN'T EXIST")
     }
-    
+  
   }
   function signOutUser () {
     signOut(auth)
@@ -98,15 +93,15 @@ function App() {
       <>
           <button onClick={SaveData}>SAVE PAGE</button>
           <button onClick={loadJrnl}>LOAD</button>
-          <button onClick={()=>console.log(user.email)}>LOG USER</button>
+          <button onClick={()=>console.log(user)}>LOG USER</button>
           <button onClick={GetJrnlList}>GET DATA FROM USER</button>
         { user ? 
 
           <S.App id='App'>
             
               { isMenuOpen ? 
-              <UserContext.Provider value={{user: user, signOutUser: signOutUser}}>
-                <Menu menuSelected={menuSelected} setIsMenuOpen={setIsMenuOpen} auth={auth} signOut={signOut}/>
+              <UserContext.Provider value={{user: user, signOutUser: signOutUser, jrnls: jrnls, setJrnlNumber: setJrnlNumber, loadJrnl: loadJrnl}}>
+                <Menu menuSelected={menuSelected} setJrnl={setJrnl} setIsMenuOpen={setIsMenuOpen} auth={auth} signOut={signOut}/>
               </UserContext.Provider>
                  : <></>
               }
