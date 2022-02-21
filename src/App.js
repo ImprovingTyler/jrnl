@@ -3,24 +3,10 @@ import Nav from './components/nav/Nav';
 import Menu from './components/Menu/Menu'
 import Page from './components/Page';
 import { useState, createContext } from 'react'
-
 import LogInWithGoogle from './components/LogInWithGoogle/LogInWithGoogle';
-import { GoogleAuthProvider, signInWithPopup, getAuth, signOut } from "firebase/auth";
-import { initializeApp } from 'firebase/app'
-import { doc, getFirestore, setDoc, getDoc, addDoc, collection } from "firebase/firestore"; 
-const firebaseConfig = {
-  apiKey: "AIzaSyDSi0QLsrrr-hq3DWKSaaUDq-rRRGh1NOY",
-  authDomain: "jrnl-7e606.firebaseapp.com",
-  projectId: "jrnl-7e606",
-  storageBucket: "jrnl-7e606.appspot.com",
-  messagingSenderId: "56356826329",
-  appId: "1:56356826329:web:47b302df53882b0999e2c8",
-  measurementId: "G-MDVLYT5W3H"
-};
-const app = initializeApp(firebaseConfig) 
-const auth = getAuth()
-const provider = new GoogleAuthProvider()
-const db = getFirestore()
+import { auth, db, provider,  } from './firebase'
+import { doc,  setDoc, getDoc, addDoc, collection } from "firebase/firestore"; 
+import { signInWithPopup, signOut } from "firebase/auth";
 
 export const UserContext = createContext()
 
@@ -36,56 +22,12 @@ S.Login = styled.button`
 
 
 function App() {
-  const [jrnlCollection, setJrnlCollection] = useState() // db
   const [jrnl, setJrnl] = useState('JRNL TITLE') // title
   const [page, setPage] = useState(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuSelected, setMenuSelected] = useState(0)
   const [user, setUser] = useState(null)
   
-  let userID
-  
-
-  let loadedJrnl = {
-    jrnlTitle: '',
-    pages: []
-  }
-
-  let loadedPage = {
-    pageTitle: '',
-    pageContent: '',
-    tags: [],
-    pageID: 0
-  }
-
-
-
-  function handleLogin() {
-    signInWithPopup(auth, provider)
-    .then((result) => {
-      setUser(result.user)
-      userID = result.user.id
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-  }
-  async function handleSave() {
-    await setDoc(doc(db, 'users', auth.currentUser.uid, doc().id), {
-      jrnl: [
-        {
-          jrnlTitle: jrnl,
-          pages: [
-            {
-              pageTitle: 'pageTitle',
-              content: page
-            }
-          ]
-        }
-      ]
-    });
-  }
-
   async function SaveData() {
     await addDoc(collection(db, 'jrnls'), {
       jrnlTitle: "jrnl",
@@ -93,7 +35,11 @@ function App() {
       ownerID: auth.currentUser.uid
     });
   }
-  
+  function handleLogin() {
+    signInWithPopup(auth, provider)
+    .then((result) => setUser(result.user))
+    .catch((error) => console.log(error))
+  }
   async function loadJrnl() {
     const docRef = doc(db, 'users', auth.currentUser.uid)
     const docSnap = await getDoc(docRef)
@@ -109,11 +55,13 @@ function App() {
     }
     
   }
-  const signOutUser = () => {
-    signOut(auth).then(setUser(null))
-    .catch((err)=>console.log(err))
-    
+
+  function signOutUser () {
+    signOut(auth)
+    .then(setUser(null))
+    .catch((e)=>console.log(e))
   }
+
   
 
   return (
@@ -146,3 +94,20 @@ function App() {
 
 
 export default App;
+
+
+// async function handleSave() {
+//   await setDoc(doc(db, 'users', auth.currentUser.uid, doc().id), {
+//     jrnl: [
+//       {
+//         jrnlTitle: jrnl,
+//         pages: [
+//           {
+//             pageTitle: 'pageTitle',
+//             content: page
+//           }
+//         ]
+//       }
+//     ]
+//   });
+// }
