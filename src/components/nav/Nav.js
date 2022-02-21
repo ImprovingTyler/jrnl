@@ -9,6 +9,58 @@ import icon5 from './icons/5.png'
 
 const S = {}
 
+S.Nav = styled.div`
+height: 55px;
+width: 100vw;
+background: #005eec;
+position: fixed;
+z-index: 1000;
+display: grid;
+grid-auto-flow: column;
+box-shadow: 0px 1px 10px black;
+`;
+S.Icon = styled.img`
+content:url(${props => props.icon});
+width: 50px;
+height: 50px;
+align-self: center;
+justify-self: center;
+transition: 250ms;
+:hover {
+    filter: invert();
+}
+`;   
+S.TitleContainer = styled.div`
+width: 25vh;
+height: 50px; 
+color: white;
+text-align: center;
+line-height: 20px;
+justify-self: center;
+display: grid;
+align-items: center;
+overflow-y: hidden;
+white-space: nowrap;
+font-size: 1rem;
+:hover {
+    cursor: pointer;
+}
+font-family: 'Roboto Mono';
+`;
+S.EditTitle = styled.input`
+background: none;
+/* border-radius: 0; */
+border: none;
+color: white;
+text-align: center;
+::placeholder {
+    color: white;
+    font-size: 1rem;
+}
+:focus {
+    outline: none;
+}
+`;
 
 const Nav = (props) => {
 
@@ -22,58 +74,6 @@ const Nav = (props) => {
         menuSelected
     } = props
 
-    S.Nav = styled.div`
-        height: 55px;
-        width: 100vw;
-        background: #005eec;
-        position: fixed;
-        z-index: 1000;
-        display: grid;
-        grid-auto-flow: column;
-        box-shadow: 0px 1px 10px black;
-    `;
-    S.Icon = styled.img`
-        content:url(${props => props.icon});
-        width: 50px;
-        height: 50px;
-        align-self: center;
-        justify-self: center;
-        transition: 250ms;
-        :hover {
-            filter: invert();
-        }
-    `;   
-    S.TitleContainer = styled.div`
-        width: 25vh;
-        height: 50px; 
-        color: white;
-        text-align: center;
-        line-height: 20px;
-        justify-self: center;
-        display: grid;
-        align-items: center;
-        overflow-y: hidden;
-        white-space: nowrap;
-        font-size: 1rem;
-        :hover {
-            cursor: pointer;
-        }
-        font-family: 'Roboto Mono';
-    `;
-    S.EditTitle = styled.input`
-        background: none;
-        /* border-radius: 0; */
-        border: none;
-        color: white;
-        text-align: center;
-        ::placeholder {
-            color: white;
-            font-size: 1rem;
-        }
-        :focus {
-            outline: none;
-        }
-    `;
 
     const [titleClicked, setTitleClicked] = useState(false)
     let [title, setTitle] = useState('Click to change title!')

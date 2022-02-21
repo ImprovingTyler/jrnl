@@ -1,14 +1,7 @@
 import styled from 'styled-components'
 import { UserContext } from '../../../App';
 const S = {}
-
-const UserMenu = (props) => {
-    
-    const {
-       
-    } = props
-
-    S.UserMenu = styled.div`
+S.UserMenu = styled.div`
         color: white;
         display: grid;
         align-items: center;
@@ -16,17 +9,22 @@ const UserMenu = (props) => {
         width: 100%;
         height: 100%;
         font-family: 'Roboto Mono';
-    `;
+`;
+S.LogIn = styled.div`
 
-    S.LogIn = styled.div`
+`;
+S.UserImage = styled.img`
+    width: auto;
+    height: 30%;
+    border-radius: 50%;
+`;
+const UserMenu = (props) => {
+    
+    const {
+       
+    } = props
 
-    `;
-
-    S.UserImage = styled.img`
-        width: auto;
-        height: 30%;
-        border-radius: 50%;
-    `;
+    
 
     return (
         <UserContext.Consumer>

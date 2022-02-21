@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { UserContext } from '../../../App';
 import jrnlIcon from './../../nav/icons/0.png'
 const S = {}
 S.JrnlMenu = styled.div`
@@ -9,7 +10,6 @@ S.JrnlMenu = styled.div`
     align-items: center;
     justify-items: center;
 `;
-
 S.JrnlCard = styled.div`
     width: 80%;
     height: 60px;
@@ -23,7 +23,6 @@ S.JrnlCard = styled.div`
         cursor: pointer;
     }
 `;
-
 S.JrnlIcon = styled.img`
     width: 60px;
     height: 60px;
@@ -43,17 +42,19 @@ function LoadJrnls(user) {
     )
 }
 
-const JrnlMenu = () => {
+const JrnlMenu = (props) => {
 
     return (
-        <S.JrnlMenu>
-            <S.JrnlCard>
-                <S.JrnlIcon src={jrnlIcon}/>
-                <h3>JRNL TITLE</h3>
-                <h3>DATE CREATED</h3>
-                <h3>LAST EDIT</h3>
-            </S.JrnlCard>
-        </S.JrnlMenu>
+        <UserContext.Consumer>
+            { user =>
+                <S.JrnlMenu>
+                    <S.JrnlCard>
+                        <S.JrnlIcon src={jrnlIcon}/>
+                        <h3>JRNL TITLE</h3>
+                    </S.JrnlCard>
+                </S.JrnlMenu>
+            }
+        </UserContext.Consumer>
     )
 }
 

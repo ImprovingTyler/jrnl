@@ -8,15 +8,7 @@ import CreateMenu from './CreateMenu/CreateMenu';
 import SettingsMenu from './SettingsMenu/SettingsMenu';
 import {AiOutlineClose} from 'react-icons/ai'
 const S = {}
-
-const Menu = (props) => {
-    const {
-        menuSelected,
-        setIsMenuOpen,
-        auth,
-        signOut
-    } = props
-    S.Menu = styled.div`
+S.Menu = styled.div`
         width: 80vw;
         height: 80vh;
         background: rgb(50,50,50);
@@ -27,16 +19,23 @@ const Menu = (props) => {
         bottom: 0;
         margin: auto;
         z-index: 999;
-    `;
-    S.ExitButton = styled.div`
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 2rem;
-        height: 2rem;
-        font-size: 2rem;
-        color: white;
-    `;
+`;
+S.ExitButton = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2rem;
+    height: 2rem;
+    font-size: 2rem;
+    color: white;
+`;
+
+const Menu = (props) => {
+    const {
+        menuSelected,
+        setIsMenuOpen
+    } = props
+    
 
     function closeMenu () {
         setIsMenuOpen(false)

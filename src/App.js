@@ -1,11 +1,14 @@
+import { useState, createContext, useEffect } from 'react'
+
 import styled from 'styled-components'
 import Nav from './components/nav/Nav';
 import Menu from './components/Menu/Menu'
 import Page from './components/Page';
-import { useState, createContext } from 'react'
+
+import AutoSave from './utils/AutoSave'
 import LogInWithGoogle from './components/LogInWithGoogle/LogInWithGoogle';
 import { auth, db, provider,  } from './firebase'
-import { doc,  setDoc, getDoc, addDoc, collection } from "firebase/firestore"; 
+import { doc, getDoc, getDocs, addDoc, setDoc, collection, query, where} from "firebase/firestore"; 
 import { signInWithPopup, signOut } from "firebase/auth";
 
 export const UserContext = createContext()
@@ -16,9 +19,7 @@ S.App = styled.div`
   height: 100vh;
   overflow: hidden;
 `;
-S.Login = styled.button`
 
-`;
 
 
 function App() {
@@ -27,17 +28,45 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuSelected, setMenuSelected] = useState(0)
   const [user, setUser] = useState(null)
-  
+  const [uID, setUID] = useState(null)
+  const [jrnlNumber, setJrnlNumber] = useState(0)
+  // async function SaveData() {
+  //   await addDoc(collection(db, 'jrnls'), {
+  //     jrnlTitle: "jrnl",
+  //     pages: [page],
+  //     ownerID: auth.currentUser.uid
+  //   });
+  // }
+
+
+
+  async function GetJrnlList() {
+    // const docRef = collection(db, uID)
+    // await getCollection(docRef)
+    // .then((result)=>console.log(result.data()))
+    // .catch(e=>console.log(e))
+    const q = query(collection(db, uID), where("ownerID", "==", uID));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+      console.log(doc.data.jrnlTitle)
+    });
+    
+  }
+
   async function SaveData() {
-    await addDoc(collection(db, 'jrnls'), {
-      jrnlTitle: "jrnl",
+    if (setDoc(collection(db, auth.currentUser.uid, jrnlNumber)))
+      await addDoc(collection(db, auth.currentUser.uid), {
+      jrnlTitle: jrnl,
       pages: [page],
       ownerID: auth.currentUser.uid
-    });
+      });
   }
   function handleLogin() {
     signInWithPopup(auth, provider)
-    .then((result) => setUser(result.user))
+    .then((result) => {setUser(result.user) })
+    .then(setUID(auth.currentUser.uid))
     .catch((error) => console.log(error))
   }
   async function loadJrnl() {
@@ -55,20 +84,22 @@ function App() {
     }
     
   }
-
   function signOutUser () {
     signOut(auth)
     .then(setUser(null))
     .catch((e)=>console.log(e))
   }
 
-  
+  useEffect(()=>{
+    AutoSave(auth, jrnl, page, user, db, collection, addDoc)
+  },[])
 
   return (
       <>
           <button onClick={SaveData}>SAVE PAGE</button>
           <button onClick={loadJrnl}>LOAD</button>
           <button onClick={()=>console.log(user.email)}>LOG USER</button>
+          <button onClick={GetJrnlList}>GET DATA FROM USER</button>
         { user ? 
 
           <S.App id='App'>
