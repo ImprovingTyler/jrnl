@@ -10,6 +10,7 @@ import LogInWithGoogle from './components/LogInWithGoogle/LogInWithGoogle';
 import { auth, db, provider,  } from './firebase'
 import { doc, getDoc, getDocs, addDoc, setDoc, collection, query, where} from "firebase/firestore"; 
 import { signInWithPopup, signOut } from "firebase/auth";
+import LoadSelected from './utils/LoadSelected';
 
 export const UserContext = createContext()
 
@@ -31,6 +32,9 @@ function App() {
   const [user, setUser] = useState(null)
   const [uID, setUID] = useState(null)
   const [jrnlNumber, setJrnlNumber] = useState(0)
+
+  
+  const handleLoad = () => LoadSelected(jrnlNumber, jrnls, setIsMenuOpen, setJrnl, setPage, db, uID)
 
   async function GetJrnlList() {
     // const docRef = collection(db, uID)
@@ -62,56 +66,45 @@ function App() {
     .then(setUID(auth.currentUser.uid))
     .catch((error) => console.log(error))
   }
-  async function loadJrnl() {
-    const jrnlID = jrnls[1][jrnlNumber]
-    console.log(jrnlID.toString())
-    const docRef = doc(db, uID, jrnlID.toString())
-    const docSnap = await getDoc(docRef)
-    if (docSnap.exists())
-    {
-      console.log('DOCUMENT DATA:', docSnap.data())
-      setJrnl(docSnap.data().jrnlTitle)
-      setPage(docSnap.data().pages[0]) 
-      setIsMenuOpen(false)
-    }
-    else {
-      console.log("DOCUMENT DOESN'T EXIST")
-    }
   
-  }
+  
+  
+  
   function signOutUser () {
     signOut(auth)
     .then(setUser(null))
     .catch((e)=>console.log(e))
   }
-
+  
   useEffect(()=>{
     AutoSave(auth, jrnl, page, user, db, collection, addDoc)
   },[])
-
+  
   return (
-      <>
+    <>
           <button onClick={SaveData}>SAVE PAGE</button>
-          <button onClick={loadJrnl}>LOAD</button>
+          <button onClick={handleLoad}>LOAD</button>
           <button onClick={()=>console.log(user)}>LOG USER</button>
           <button onClick={GetJrnlList}>GET DATA FROM USER</button>
+          <button onClick={()=>console.log(page)}>log page</button>
+          <button onClick={()=>console.log(jrnl)}>log jrnl</button>
         { user ? 
 
-          <S.App id='App'>
+<S.App id='App'>
             
               { isMenuOpen ? 
-              <UserContext.Provider value={{user: user, signOutUser: signOutUser, jrnls: jrnls, setJrnlNumber: setJrnlNumber, loadJrnl: loadJrnl}}>
+              <UserContext.Provider value={{user: user, signOutUser: signOutUser, jrnls: jrnls, setJrnlNumber: setJrnlNumber}}>
                 <Menu menuSelected={menuSelected} setJrnl={setJrnl} setIsMenuOpen={setIsMenuOpen} auth={auth} signOut={signOut}/>
               </UserContext.Provider>
                  : <></>
-              }
+                }
             
             <Nav setJrnl={setJrnl} jrnl={jrnl} setPage={setPage} setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} setMenuSelected={setMenuSelected} menuSelected={menuSelected}/>
             <Page jrnl={jrnl} page={page} setPage={setPage}/>
           </S.App> 
 
-          :
-          <LogInWithGoogle handleLogin={handleLogin}/>
+:
+<LogInWithGoogle handleLogin={handleLogin}/>
         }
       </>
   );
@@ -121,10 +114,29 @@ function App() {
 
 export default App;
 
+// async function loadJrnl() {
+//   console.log('START LOADING JRNL')
+//   console.log(jrnlID.toString())
+//   const jrnlID = jrnls[1][jrnlNumber]
+//   const docRef = doc(db, uID, jrnlID.toString())
+//   const docSnap = await getDoc(docRef)
+//   if (docSnap.exists())
+//   { 
+//     console.log('DOCUMENT DATA:', docSnap.data())
+//     setJrnl(docSnap.data().jrnlTitle)
+//     setPage(docSnap.data().pages[0]) 
+//     setIsMenuOpen(false)
+//   }
+//   else {
+//     console.log("DOCUMENT DOESN'T EXIST")
+//   }
+//   console.log('DONE LOADING JRNL')
+
+// }
 
 // async function handleSave() {
-//   await setDoc(doc(db, 'users', auth.currentUser.uid, doc().id), {
-//     jrnl: [
+  //   await setDoc(doc(db, 'users', auth.currentUser.uid, doc().id), {
+    //     jrnl: [
 //       {
 //         jrnlTitle: jrnl,
 //         pages: [

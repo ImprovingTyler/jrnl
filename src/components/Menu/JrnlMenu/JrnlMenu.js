@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { UserContext } from '../../../App';
+import LoadSelected from '../../../utils/LoadSelected';
 import jrnlIcon from './../../nav/icons/0.png'
 const S = {}
 S.JrnlMenu = styled.div`
@@ -7,17 +8,19 @@ S.JrnlMenu = styled.div`
     height: 100%;
     color: white;
     display: grid;
-    align-items: center;
+    align-content: center;
     justify-items: center;
 `;
 S.JrnlCard = styled.div`
     width: 80%;
     height: 60px;
     border-bottom: 1px solid gray;
+    border-top: 1px solid gray;
     display: grid;
     grid-auto-flow: column;
     align-items: center;
     font-family: 'Roboto Mono';
+    margin-bottom: 1rem;
     :hover {
         opacity: .5;
         cursor: pointer;
@@ -41,21 +44,22 @@ const JrnlMenu = (props) => {
     }
     
     return (
-        <UserContext.Consumer>
+        <S.JrnlMenu>
+            <UserContext.Consumer>
             { ({jrnls, setJrnlNumber, loadJrnl}) =>
                 jrnls[0].map((jrnl, index)=>{
                     return(
                         <S.JrnlCard key={index} onClick={()=>{
-                            setJrnlNumber(index)
-                            loadJrnl()
-                            }}
+                            LoadSelected(index)
+                        }}
                         >
                             <S.JrnlIcon src={jrnlIcon}/>
                             <h3>{jrnl}</h3>
                         </S.JrnlCard>)
                 })
             }
-        </UserContext.Consumer>
+            </UserContext.Consumer>
+        </S.JrnlMenu>
     )
 }
 
