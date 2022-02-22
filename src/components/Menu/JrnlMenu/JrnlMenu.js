@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { UserContext } from '../../../App';
-import LoadSelected from '../../../utils/LoadSelected';
+import { DataContext } from '../../../App';
 import jrnlIcon from './../../nav/icons/0.png'
 const S = {}
 S.JrnlMenu = styled.div`
@@ -34,31 +33,24 @@ S.JrnlIcon = styled.img`
 
 
 const JrnlMenu = (props) => {
-
+    
     const {
-        setJrnl
     } = props
     
-    function LoadJrnls(jrnlToLoad) {
-        setJrnl(jrnlToLoad)
-    }
-    
+
     return (
         <S.JrnlMenu>
-            <UserContext.Consumer>
-            { ({jrnls, setJrnlNumber, loadJrnl}) =>
+            <DataContext.Consumer>
+            { ({jrnls, handleLoad}) =>
                 jrnls[0].map((jrnl, index)=>{
                     return(
-                        <S.JrnlCard key={index} onClick={()=>{
-                            LoadSelected(index)
-                        }}
-                        >
+                        <S.JrnlCard key={index} onClick={()=>handleLoad(index)}>
                             <S.JrnlIcon src={jrnlIcon}/>
                             <h3>{jrnl}</h3>
                         </S.JrnlCard>)
                 })
             }
-            </UserContext.Consumer>
+            </DataContext.Consumer>
         </S.JrnlMenu>
     )
 }

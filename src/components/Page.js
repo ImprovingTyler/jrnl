@@ -72,7 +72,6 @@ const Page = (props) => {
     }
     return(
         <>
-            <button onClick={handleSave}>SAVE</button>
             <S.Page id='Page'>
                 
                 <S.PageContent id='PageContent'>

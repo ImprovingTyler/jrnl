@@ -1,13 +1,12 @@
 import {doc, getDoc} from 'firebase/firestore'
 
-async function LoadSelected ( jrnlNumber, jrnls, setIsMenuOpen, setJrnl, setPage, db, uID) {
+async function LoadSelected (jrnlNumber, jrnls,  setJrnl, setPage, db, uID, setSelectedJrnl) {
 
-    // console.log(jrnlNumber)
-    // console.log(jrnls)
-    // console.log(db)
-    // console.log(uID)
-    const jrnlID = jrnls[1][jrnlNumber] // jrnls array [ [titles], []]
-    const docRef = doc(db, uID, jrnlID.toString())
+
+    const jrnlID = jrnls[1][jrnlNumber] 
+    setSelectedJrnl(jrnlID)
+    console.log('JRNLID: ', jrnlID)
+    const docRef = await doc(db, uID, jrnlID.toString())
     const docSnap = await getDoc(docRef)
 
     if(docSnap.exists()){

@@ -34,8 +34,10 @@ const Menu = (props) => {
     const {
         menuSelected,
         setIsMenuOpen,
-        setJrnl
+        setJrnl,
+        handleGetJrnlList
     } = props
+    
     
 
     function closeMenu () {
@@ -44,7 +46,7 @@ const Menu = (props) => {
     function openMenu(menuSelected) {
         switch(menuSelected) {
             case 0 : return <UserMenu/>
-            case 1 : return <JrnlMenu setJrnl={setJrnl} />
+            case 1 : return <JrnlMenu setJrnl={setJrnl} handleGetJrnlList={handleGetJrnlList} />
             case 2 : return <PageMenu/>
             case 3 : return <TagsMenu/>
             case 4 : return <CreateMenu/>

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { UserContext } from '../../../App';
+import { DataContext } from '../../../App';
 const S = {}
 S.UserMenu = styled.div`
         color: white;
@@ -27,15 +27,15 @@ const UserMenu = (props) => {
     
 
     return (
-        <UserContext.Consumer>
-            {({user, signOutUser}) => 
+        <DataContext.Consumer>
+            {({user, handleSignOut}) => 
                 <S.UserMenu>
                     <S.UserImage src={user.photoURL}/>
                     <h3>{user.email}</h3>
-                    <button onClick={signOutUser} >SIGN OUT</button>
+                    <button onClick={handleSignOut} >SIGN OUT</button>
                 </S.UserMenu>
             }
-        </UserContext.Consumer>
+        </DataContext.Consumer>
     )
 }
 
