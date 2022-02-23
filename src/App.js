@@ -5,16 +5,11 @@ import Nav from './components/nav/Nav';
 import Menu from './components/Menu/Menu'
 import Page from './components/Page';
 
-import AutoSave from './utils/AutoSave'
-import SaveData from './utils/SaveData'
-import GetPageList from './utils/GetPageList';
-import GetJrnlList from './utils/GetJrnlList';
-import Login from './utils/Login';
+import { AutoSave, GetJrnlList, GetPageList, LoadSelected, Login, SaveData, SignOut} from './utils/index'
 
 import LogInWithGoogle from './components/LogInWithGoogle/LogInWithGoogle';
 import { auth, db, provider,  } from './firebase'
-import LoadSelected from './utils/LoadSelected';
-import SignOut from './utils/SignOut';
+import Save from './components/Save/Save';
 
 export const DataContext = createContext()
 
@@ -46,7 +41,7 @@ S.Btns = styled.div`
 
 function App() {
   const [jrnls] = useState([[],[]])
-  const [jrnl, setJrnl] = useState('JRNL TITLE') // title
+  const [jrnl, setJrnl] = useState('TITLE(CLICK TO EDIT)') // title
   const [page, setPage] = useState(null)
   const [pages] = useState([])
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -54,38 +49,36 @@ function App() {
   const [user, setUser] = useState(null)
   const [uID, setUID] = useState(null)
   const [jrnlNumber, setJrnlNumber] = useState(0)
-  const [selectedJrnl, setSelectedJrnl] = useState()
-  const [jrnlData, setJrnlData] = useState({
-    jrnlTitle: jrnl,
-    ownerID: uID,
-    pages: []
-  })
+  const [selectedJrnl, setSelectedJrnl] = useState('default')
+  const [selectedPage, setSelectedPage] = useState('default')
 
+  const handleLogin = () => Login(setUser, setUID)
+  const handleSignOut = () => SignOut(setUser)
+  const handleGetJrnlList = () => GetJrnlList(db, uID, jrnls)
+  const handleSave = () => SaveData(selectedJrnl, jrnl, jrnls, page, uID, db, selectedPage, handleGetJrnlList)
   const handleLoad = async (index) => {
-    console.log('INDEX : ', index)
     LoadSelected(index, jrnls,  setJrnl, setPage, db, uID, setSelectedJrnl)
     setIsMenuOpen(false) 
     setJrnlNumber(index)   
   }
-  const handleLogin = () => Login(setUser, setUID)
-  const handleSignOut = () => SignOut(setUser)
-  const handleGetJrnlList = () => GetJrnlList(db, uID, jrnls)
   
   
   
   useEffect(()=>{
-    if(uID !== null) {handleGetJrnlList()}
+    if (uID !== null) handleGetJrnlList()
+    
   },[uID])
   
   return (
     <>
           <S.Btns>
             <S.TestBtn onClick={()=>GetPageList(db, uID, selectedJrnl, pages)}>GetPageList</S.TestBtn>
-            <S.TestBtn onClick={()=>SaveData(selectedJrnl, jrnls, uID, db, jrnlNumber)}>SaveData</S.TestBtn>
+            <S.TestBtn onClick={()=>SaveData(selectedJrnl, jrnl, page, uID, db, selectedPage)}>SaveData</S.TestBtn>
+            <S.TestBtn onClick={()=>console.log('JRNL: ',jrnl, ' PAGE: ',page)}>Log Jrnl / Page</S.TestBtn>
           </S.Btns>
         { user ? 
 
-<S.App id='App'>
+          <S.App id='App'>
             
               { isMenuOpen ? 
               <DataContext.Provider value={{user: user, handleSignOut: handleSignOut, jrnls: jrnls, handleLoad: handleLoad, jrnlNumber: jrnlNumber}}>
@@ -96,10 +89,10 @@ function App() {
             
             <Nav setJrnl={setJrnl} jrnl={jrnl} setPage={setPage} setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} setMenuSelected={setMenuSelected} menuSelected={menuSelected}/>
             <Page jrnl={jrnl} page={page} setPage={setPage}/>
+            <Save handleSave={handleSave}/>
           </S.App> 
-
-:
-<LogInWithGoogle handleLogin={handleLogin}/>
+              :
+          <LogInWithGoogle handleLogin={handleLogin}/>
         }
       </>
   );

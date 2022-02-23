@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components'
-import UserMenu from './UserMenu/UserMenu';
-import JrnlMenu from './JrnlMenu/JrnlMenu';
-import PageMenu from './PageMenu/PageMenu';
-import TagsMenu from './TagsMenu/TagsMenu';
-import CreateMenu from './CreateMenu/CreateMenu';
-import SettingsMenu from './SettingsMenu/SettingsMenu';
+import UserMenu from './menus/UserMenu';
+import JrnlMenu from './menus/JrnlMenu';
+import PageMenu from './menus/PageMenu';
+import TagsMenu from './menus/TagsMenu';
+import CreateMenu from './menus/CreateMenu';
+import SettingsMenu from './menus/SettingsMenu';
 import {AiOutlineClose} from 'react-icons/ai'
 const S = {}
 S.Menu = styled.div`

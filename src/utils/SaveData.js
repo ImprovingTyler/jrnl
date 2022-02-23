@@ -1,33 +1,27 @@
 import { setDoc, addDoc, collection, doc, getDoc} from 'firebase/firestore'
-async function SaveData (selectedJrnl, jrnls, uID, db, jrnlNumber) {
-    
-    console.log('SELECTEDJRNL: ',selectedJrnl)
-    console.log('JRNLS: ',jrnls)
-    console.log('UID: ',uID)
-    console.log('JRNLNUMBER: ',jrnlNumber)
+async function SaveData (selectedJrnl, jrnl, jrnls, page, uID, db, selectedPage, handleGetJrnlList) {
 
+    console.log('JRNLS : ', jrnls)
     const docRef = doc(db, uID, selectedJrnl[0]);
+    const collectionRef = collection(db, uID)
     const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
+    
+    if (selectedJrnl === 'default' && selectedPage === 'default') {
+        // save as new jrnl (CONSIDER DOING A POP UP)
+        await addDoc(collectionRef, {
+            jrnlTitle: jrnl,
+            ownerID: uID,
+            pages: [page]
+        })
     } else {
-    // doc.data() will be undefined in this case
-    console.log("No such document!");
+        // save as selected jrnl
+        await setDoc(docRef, {
+            jrnlTitle: jrnl,
+            ownerID: uID,
+            pages: docSnap.data().pages[selectedPage]
+        })
     }
-    // const docRef = doc(collection(db, uID, selectedJrnl))
-    
-    // const docSnapshot = await getDoc(docRef)
-    // console.log(docSnapshot)
-        // await addDoc(collection(db, auth.currentUser.uid), 
-        //     {
-        //         jrnlTitle: jrnl,
-        //         pages: [page],
-        //         ownerID: auth.currentUser.uid
-        //     }
-        // );
-    
-        
-
+    handleGetJrnlList()
 }
 
 export default SaveData
